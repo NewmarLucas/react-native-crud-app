@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
   },
   headerTitle: {
     color: '#fff',
-    fontSize: 36,
+    fontSize: 25,
     width: '70%',
     textAlign: 'center',
     fontFamily: 'InterSemiBold',

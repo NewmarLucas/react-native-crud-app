@@ -31,6 +31,10 @@ export default function Welcome() {
     navigation.navigate('Details' as never, { product } as never);
   };
 
+  const updateProduct = (product: DataInterface) => {
+    navigation.navigate('Update' as never, { product } as never);
+  };
+
   return (
     <View style={styles.container}>
       <Header text='Indice' />
@@ -52,7 +56,9 @@ export default function Welcome() {
                 seeMore={() => {
                   seeProductDetails(item);
                 }}
-                editAction={() => {}}
+                editAction={() => {
+                  updateProduct(item);
+                }}
                 deleteAction={() => {}}
               />
             )}
