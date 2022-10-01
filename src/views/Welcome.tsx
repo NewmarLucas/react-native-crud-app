@@ -1,27 +1,15 @@
+import { useNavigation } from '@react-navigation/native';
 import React, { useState } from 'react';
 import { FlatList, StyleSheet, Text, View } from 'react-native';
 import { EmptyList, Header, ListItem } from '../components';
-
-interface DataInterface {
-  id: number;
-  title: string;
-  description: string;
-  price: number;
-  discountPercentage: number;
-  rating: number;
-  stock: number;
-  brand: string;
-  category: string;
-  thumbnail: string;
-  images: string[];
-}
+import { DataInterface } from '../helpers/types';
 
 const initialState = [
   {
     id: 1,
     title: 'iPhone 9',
     description: 'An apple mobile which is nothing like apple',
-    price: 549,
+    price: 1549.5,
     discountPercentage: 12.96,
     rating: 4.69,
     stock: 94,
@@ -31,15 +19,17 @@ const initialState = [
     images: [
       'https://dummyjson.com/image/i/products/1/1.jpg',
       'https://dummyjson.com/image/i/products/1/2.jpg',
-      'https://dummyjson.com/image/i/products/1/3.jpg',
-      'https://dummyjson.com/image/i/products/1/4.jpg',
-      'https://dummyjson.com/image/i/products/1/thumbnail.jpg',
     ],
   },
 ];
 
 export default function Welcome() {
+  const navigation = useNavigation();
   const [data] = useState<DataInterface[]>(initialState);
+
+  const seeProductDetails = (product: DataInterface) => {
+    navigation.navigate('Details' as never, { product } as never);
+  };
 
   return (
     <View style={styles.container}>
@@ -59,7 +49,9 @@ export default function Welcome() {
               <ListItem
                 key={item.id}
                 title={item.title}
-                seeMore={() => {}}
+                seeMore={() => {
+                  seeProductDetails(item);
+                }}
                 editAction={() => {}}
                 deleteAction={() => {}}
               />
