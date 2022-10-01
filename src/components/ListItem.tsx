@@ -57,10 +57,11 @@ const styles = StyleSheet.create({
     paddingVertical: 20,
     borderBottomColor: '#fff',
     borderBottomWidth: 1,
+    height: 75,
   },
   leftContent: {
     height: '100%',
-    justifyContent: 'space-between',
+    justifyContent: 'space-evenly',
   },
   title: {
     color: '#fff',
