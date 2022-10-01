@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { FlatList, StyleSheet, Text, View } from 'react-native';
-import { Header, ListItem } from '../components';
+import { EmptyList, Header, ListItem } from '../components';
 
 interface DataInterface {
   id: number;
@@ -49,18 +49,23 @@ export default function Welcome() {
         <View style={styles.listTitleContainer}>
           <Text style={styles.listTitle}>Lista de produtos:</Text>
         </View>
-        <FlatList
-          data={data}
-          renderItem={({ item }) => (
-            <ListItem
-              key={item.id}
-              title={item.title}
-              seeMore={() => {}}
-              editAction={() => {}}
-              deleteAction={() => {}}
-            />
-          )}
-        />
+
+        {data.length === 0 ? (
+          <EmptyList text='Nenhum produto encontrado' />
+        ) : (
+          <FlatList
+            data={data}
+            renderItem={({ item }) => (
+              <ListItem
+                key={item.id}
+                title={item.title}
+                seeMore={() => {}}
+                editAction={() => {}}
+                deleteAction={() => {}}
+              />
+            )}
+          />
+        )}
       </View>
     </View>
   );
