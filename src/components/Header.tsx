@@ -50,9 +50,4 @@ const styles = StyleSheet.create({
     top: 40,
     left: 25,
   },
-  buttonText: {
-    color: '#fff',
-    fontSize: 14,
-    fontFamily: 'InterMedium',
-  },
 });
