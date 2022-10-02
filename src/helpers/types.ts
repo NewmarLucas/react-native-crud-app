@@ -11,3 +11,14 @@ export interface DataInterface {
   thumbnail: string;
   images: string[];
 }
+
+export interface FormInterface {
+  title: string;
+  description: string;
+  price: number;
+  discountPercentage: number;
+  rating: number;
+  stock: number;
+  brand: string;
+  category: string;
+}

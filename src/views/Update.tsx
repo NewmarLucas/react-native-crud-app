@@ -9,20 +9,10 @@ import {
 } from 'react-native';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { Header, TextInputFilled } from '../components';
-import { DataInterface } from '../helpers/types';
+import { DataInterface, FormInterface } from '../helpers/types';
 import { formatCurrency } from '../helpers/utils';
 import { ModalContext } from '../providers/Modal';
-
-interface FormInterface {
-  title: string;
-  description: string;
-  price: number;
-  discountPercentage: number;
-  rating: number;
-  stock: number;
-  brand: string;
-  category: string;
-}
+import { ProductForm } from '../components/ProductForm';
 
 export default function Update() {
   const navigation = useNavigation();
@@ -75,64 +65,8 @@ export default function Update() {
     <View style={styles.container}>
       <Header text='Atualizar dados do produto' showBackButton />
 
-      <ScrollView style={styles.form}>
-        <TextInputFilled
-          label='Título'
-          value={form.title}
-          onChangeText={(text) => {
-            handleChange('title', text);
-          }}
-        />
-        <TextInputFilled
-          label='Descrição'
-          value={form.description}
-          onChangeText={(text) => {
-            handleChange('description', text);
-          }}
-        />
-        <TextInputFilled
-          label='Preço'
-          value={form.price}
-          onChangeText={(text) => {
-            handleChange('price', text);
-          }}
-        />
-        <TextInputFilled
-          label='Porcentagem de desconto'
-          value={form.discountPercentage}
-          onChangeText={(text) => {
-            handleChange('discountPercentage', text);
-          }}
-        />
-        <TextInputFilled
-          label='Avaliação'
-          value={form.rating}
-          onChangeText={(text) => {
-            handleChange('rating', text);
-          }}
-        />
-        <TextInputFilled
-          label='Estoque'
-          value={form.stock}
-          onChangeText={(text) => {
-            handleChange('stock', text);
-          }}
-        />
-        <TextInputFilled
-          label='Marca'
-          value={form.brand}
-          onChangeText={(text) => {
-            handleChange('brand', text);
-          }}
-        />
-        <TextInputFilled
-          label='Categoria'
-          value={form.category}
-          onChangeText={(text) => {
-            handleChange('category', text);
-          }}
-        />
-      </ScrollView>
+      <ProductForm form={form} handleChange={handleChange} />
+
       <View style={styles.buttonsContainer}>
         <TouchableOpacity
           style={{ ...styles.button, backgroundColor: '#19A0CB' }}
@@ -157,9 +91,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#222',
   },
-  form: {
-    width: '90%',
-  },
+
   buttonsContainer: {
     width: '90%',
     height: 125,
