@@ -140,11 +140,11 @@ export default function Details() {
             </View>
           </View>
           <View style={styles.buttonsContainer}>
-            <RoundedButton action={updateProduct} text='Editar' />
+            <RoundedButton action={updateProduct} text='Alterar' />
             <RoundedButton
               isDeleteButton
               action={verifyDeleteAction}
-              text='Deletar'
+              text='Excluir'
             />
           </View>
         </ScrollView>
