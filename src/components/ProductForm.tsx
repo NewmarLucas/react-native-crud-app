@@ -30,6 +30,7 @@ export function ProductForm(props: Props) {
       <TextInputFilled
         label='Preço'
         value={form.price}
+        type='number-pad'
         onChangeText={(text) => {
           handleChange('price', text);
         }}
@@ -37,6 +38,7 @@ export function ProductForm(props: Props) {
       <TextInputFilled
         label='Porcentagem de desconto'
         value={form.discountPercentage}
+        type='number-pad'
         onChangeText={(text) => {
           handleChange('discountPercentage', text);
         }}
@@ -44,6 +46,7 @@ export function ProductForm(props: Props) {
       <TextInputFilled
         label='Avaliação'
         value={form.rating}
+        type='number-pad'
         onChangeText={(text) => {
           handleChange('rating', text);
         }}
@@ -51,6 +54,7 @@ export function ProductForm(props: Props) {
       <TextInputFilled
         label='Estoque'
         value={form.stock}
+        type='number-pad'
         onChangeText={(text) => {
           handleChange('stock', text);
         }}

@@ -5,7 +5,20 @@ interface Props {
   value: string | number;
   label: string;
   onChangeText: (text: string) => void;
-  type?: string;
+  type?:
+    | 'default'
+    | 'numeric'
+    | 'email-address'
+    | 'ascii-capable'
+    | 'numbers-and-punctuation'
+    | 'url'
+    | 'number-pad'
+    | 'phone-pad'
+    | 'name-phone-pad'
+    | 'decimal-pad'
+    | 'twitter'
+    | 'web-search'
+    | 'visible-password';
 }
 
 export const TextInputFilled = (props: Props) => {
@@ -19,6 +32,7 @@ export const TextInputFilled = (props: Props) => {
         style={styles.input}
         onChangeText={onChangeText}
         placeholderTextColor='#999'
+        keyboardType={type ?? 'default'}
       />
     </>
   );
@@ -31,8 +45,8 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     padding: 10,
     borderRadius: 8,
-    backgroundColor: '#fff',
-    color: '#000',
+    backgroundColor: '#666',
+    color: '#fff',
     fontFamily: 'InterMedium',
     fontSize: 16,
   },
