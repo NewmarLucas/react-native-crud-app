@@ -6,6 +6,7 @@ import { FormInterface } from '../helpers/types';
 import { ModalContext } from '../providers/Modal';
 import { ProductForm } from '../components/ProductForm';
 import { isValidForm } from '../helpers/utils';
+import { LoadingContext } from '../providers/Loading';
 
 const initialState = {
   title: '',
@@ -22,6 +23,7 @@ export default function Create() {
   const navigation = useNavigation();
 
   const { setShowModal } = useContext(ModalContext);
+  const { setLoading } = useContext(LoadingContext);
   const [form, setForm] = useState<FormInterface>(initialState);
 
   const handleChange = (name: string, value: string) => {
@@ -46,6 +48,7 @@ export default function Create() {
     })
       .then((res) => res.json())
       .then((res) => {
+        setLoading(false);
         if (res?.id) {
           setShowModal({
             msg: 'Cadastrado com sucesso!\n\nComo a API é só para simulação, o produto não será realmente adicionado ao servidor.',
@@ -57,6 +60,12 @@ export default function Create() {
         }
         setShowModal({
           msg: 'Oops... Algo deu errado ao cadastrar novo produto!',
+        });
+      })
+      .catch(() => {
+        setLoading(false);
+        setShowModal({
+          msg: 'Oops... Algo deu errado ao atualizar os dados do produto!',
         });
       });
   };

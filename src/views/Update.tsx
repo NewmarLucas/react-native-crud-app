@@ -6,6 +6,7 @@ import { DataInterface, FormInterface } from '../helpers/types';
 import { ModalContext } from '../providers/Modal';
 import { ProductForm } from '../components/ProductForm';
 import { isValidForm } from '../helpers/utils';
+import { LoadingContext } from '../providers/Loading';
 
 export default function Update() {
   const navigation = useNavigation();
@@ -14,6 +15,7 @@ export default function Update() {
   const { product } = route.params;
 
   const { setShowModal } = useContext(ModalContext);
+  const { setLoading } = useContext(LoadingContext);
   const [form, setForm] = useState<FormInterface>({
     title: product.title,
     description: product.description,
@@ -40,6 +42,7 @@ export default function Update() {
     const isValid = isValidForm(form, setShowModal);
     if (!isValid) return;
 
+    setLoading(true);
     fetch(`https://dummyjson.com/products/${product.id}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
@@ -47,6 +50,7 @@ export default function Update() {
     })
       .then((res) => res.json())
       .then((res) => {
+        setLoading(false);
         if (res?.id) {
           setShowModal({
             msg: 'Atualizado com sucesso!\n\nComo a API é só para simulação, o produto não terá seus dados alterados no servidor.',
@@ -56,6 +60,12 @@ export default function Update() {
           });
           return;
         }
+        setShowModal({
+          msg: 'Oops... Algo deu errado ao atualizar os dados do produto!',
+        });
+      })
+      .catch(() => {
+        setLoading(false);
         setShowModal({
           msg: 'Oops... Algo deu errado ao atualizar os dados do produto!',
         });

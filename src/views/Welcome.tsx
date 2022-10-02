@@ -3,10 +3,12 @@ import React, { useState, useEffect, useContext } from 'react';
 import { FlatList, StyleSheet, Text, View } from 'react-native';
 import { EmptyList, Header, ListItem, RoundedButton } from '../components';
 import { DataInterface } from '../helpers/types';
+import { LoadingContext } from '../providers/Loading';
 import { ModalContext } from '../providers/Modal';
 
 export default function Welcome() {
   const navigation = useNavigation();
+  const { setLoading } = useContext(LoadingContext);
   const { setShowModal } = useContext(ModalContext);
   const [data, setData] = useState<DataInterface[]>([]);
 
@@ -23,16 +25,28 @@ export default function Welcome() {
   };
 
   const handleDeleteProduct = (productId: number) => {
+    setLoading(true);
     fetch(`https://dummyjson.com/products/${productId}`, {
       method: 'DELETE',
     })
       .then((res) => res.json())
       .then((res) => {
+        setLoading(false);
         if (res?.isDeleted) {
           setShowModal({
             msg: `O produto ${res?.title} foi deletado com sucesso!\n\nComo a API é só para simulação, esse produto não será realmente deletado do servidor.`,
           });
+          return;
         }
+        setShowModal({
+          msg: 'Oops... Algo deu errado ao atualizar os dados do produto!',
+        });
+      })
+      .catch(() => {
+        setLoading(false);
+        setShowModal({
+          msg: 'Oops... Algo deu errado ao atualizar os dados do produto!',
+        });
       });
   };
 
