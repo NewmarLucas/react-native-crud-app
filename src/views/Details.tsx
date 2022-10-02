@@ -1,6 +1,15 @@
-import React, { useContext } from 'react';
-import { Image, ScrollView, StyleSheet, Text, View } from 'react-native';
+import React, { useContext, useState } from 'react';
+import {
+  Image,
+  Modal,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableHighlight,
+  View,
+} from 'react-native';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
+import ImageViewer from 'react-native-image-zoom-viewer';
 import { Header, RoundedButton } from '../components';
 import { Rating } from 'react-native-ratings';
 import { DataInterface } from '../helpers/types';
@@ -16,6 +25,11 @@ export default function Details() {
 
   const { setLoading } = useContext(LoadingContext);
   const { setShowModal } = useContext(ModalContext);
+  const [showImageModal, setShowImageModal] = useState(false);
+  const images = [
+    { url: product.thumbnail },
+    ...product.images.map((item) => ({ url: item })),
+  ];
 
   const updateProduct = () => {
     navigation.navigate('Update' as never, { product } as never);
@@ -66,7 +80,23 @@ export default function Details() {
 
       {product && (
         <ScrollView style={styles.productContent}>
-          <Image style={styles.image} source={{ uri: product.thumbnail }} />
+          <TouchableHighlight
+            onPress={() => {
+              setShowImageModal(true);
+            }}
+          >
+            <Image style={styles.image} source={{ uri: product.thumbnail }} />
+          </TouchableHighlight>
+          <Modal visible={showImageModal} transparent={true}>
+            <ImageViewer
+              enableSwipeDown
+              onSwipeDown={() => {
+                setShowImageModal(false);
+              }}
+              saveToLocalByLongPress={false}
+              imageUrls={images}
+            />
+          </Modal>
 
           <View style={styles.titleContainer}>
             <Text style={styles.productTitle}>{product.title}</Text>

@@ -41,6 +41,7 @@ export default function Create() {
     const isValid = isValidForm(form, setShowModal);
     if (!isValid) return;
 
+    setLoading(true);
     fetch('https://dummyjson.com/products/add', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
