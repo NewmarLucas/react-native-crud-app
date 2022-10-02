@@ -221,7 +221,7 @@ export default function Welcome() {
 
       <View style={styles.listContainer}>
         <View style={styles.listTitleContainer}>
-          <Text style={styles.listTitle}>Lista de produtos:</Text>
+          <Text style={styles.listTitle}>Lista de produtos</Text>
         </View>
 
         {data.length === 0 ? (
@@ -256,17 +256,18 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    backgroundColor: '#383838',
+    backgroundColor: '#222',
   },
   listContainer: {
-    height: '60%',
+    height: '65%',
     marginHorizontal: 16,
     width: '100%',
-    marginTop: 30,
+    marginTop: 15,
   },
   listTitleContainer: {
     width: '100%',
     alignItems: 'center',
+    marginBottom: 15,
   },
   listTitle: {
     color: '#fff',
