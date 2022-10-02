@@ -2,6 +2,7 @@ import React from 'react';
 import { Image, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { RouteProp, useRoute } from '@react-navigation/native';
 import { Header } from '../components';
+import { Rating } from 'react-native-ratings';
 import { DataInterface } from '../helpers/types';
 import { formatCurrency } from '../helpers/utils';
 
@@ -18,15 +19,22 @@ export default function Details() {
         <ScrollView style={styles.productContent}>
           <Image style={styles.image} source={{ uri: product.thumbnail }} />
 
+          <View style={styles.titleContainer}>
+            <Text style={styles.productTitle}>{product.title}</Text>
+            <Text style={styles.detailsValue}>{product.description}</Text>
+          </View>
+
+          <View style={styles.ratingContainer}>
+            <Rating
+              ratingCount={5}
+              startingValue={product.rating}
+              type='custom'
+              tintColor='#222'
+              readonly
+            />
+          </View>
+
           <View style={styles.details}>
-            <View style={styles.detailsItem}>
-              <Text style={styles.detailsLabel}>Nome:</Text>
-              <Text style={styles.detailsValue}>{product.title}</Text>
-            </View>
-            <View style={styles.detailsItem}>
-              <Text style={styles.detailsLabel}>Descrição:</Text>
-              <Text style={styles.detailsValue}>{product.description}</Text>
-            </View>
             <View style={styles.detailsItem}>
               <Text style={styles.detailsLabel}>Preço:</Text>
               <Text style={styles.detailsValue}>
@@ -38,10 +46,6 @@ export default function Details() {
               <Text style={styles.detailsValue}>
                 {product.discountPercentage + '%'}
               </Text>
-            </View>
-            <View style={styles.detailsItem}>
-              <Text style={styles.detailsLabel}>Avaliação:</Text>
-              <Text style={styles.detailsValue}>{product.rating}</Text>
             </View>
             <View style={styles.detailsItem}>
               <Text style={styles.detailsLabel}>Estoque:</Text>
@@ -79,11 +83,23 @@ const styles = StyleSheet.create({
   details: {
     marginTop: 25,
   },
+  ratingContainer: {
+    marginTop: 15,
+  },
+  titleContainer: {
+    marginTop: 15,
+    alignItems: 'center',
+  },
   detailsItem: {
     flexDirection: 'row',
-    alignItems: 'flex-start',
+    alignItems: 'center',
     width: '100%',
     marginBottom: 5,
+  },
+  productTitle: {
+    color: '#fff',
+    fontSize: 20,
+    fontFamily: 'InterBold',
   },
   detailsLabel: {
     marginRight: 5,
@@ -95,5 +111,6 @@ const styles = StyleSheet.create({
     flexShrink: 1,
     color: '#fff',
     fontFamily: 'InterMedium',
+    textAlign: 'center',
   },
 });
