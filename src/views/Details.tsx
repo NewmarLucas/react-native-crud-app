@@ -1,15 +1,64 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Image, ScrollView, StyleSheet, Text, View } from 'react-native';
-import { RouteProp, useRoute } from '@react-navigation/native';
-import { Header } from '../components';
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
+import { Header, RoundedButton } from '../components';
 import { Rating } from 'react-native-ratings';
 import { DataInterface } from '../helpers/types';
 import { formatCurrency } from '../helpers/utils';
+import { LoadingContext } from '../providers/Loading';
+import { ModalContext } from '../providers/Modal';
 
 export default function Details() {
   const route: RouteProp<{ params: { product: DataInterface } }, 'params'> =
     useRoute();
+  const navigation = useNavigation();
   const { product } = route.params;
+
+  const { setLoading } = useContext(LoadingContext);
+  const { setShowModal } = useContext(ModalContext);
+
+  const updateProduct = () => {
+    navigation.navigate('Update' as never, { product } as never);
+  };
+
+  const verifyDeleteAction = () => {
+    setShowModal({
+      msg: `Tem certeza que deseja excluir o item: ${product.title}?`,
+      onOk: () => {
+        handleDeleteProduct();
+      },
+      onCancel: () => {},
+    });
+  };
+
+  const handleDeleteProduct = () => {
+    setLoading(true);
+    fetch(`https://dummyjson.com/products/${product.id}`, {
+      method: 'DELETE',
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        setLoading(false);
+        if (res?.isDeleted) {
+          setShowModal({
+            msg: `O produto ${res?.title} foi deletado com sucesso!\n\nComo a API é só para simulação, esse produto não será realmente deletado do servidor.`,
+            onOk: () => {
+              navigation.navigate('Welcome' as never);
+            },
+          });
+          return;
+        }
+        setShowModal({
+          msg: 'Oops... Algo deu errado ao atualizar os dados do produto!',
+        });
+      })
+      .catch(() => {
+        setLoading(false);
+        setShowModal({
+          msg: 'Oops... Algo deu errado ao atualizar os dados do produto!',
+        });
+      });
+  };
 
   return (
     <View style={styles.container}>
@@ -21,7 +70,7 @@ export default function Details() {
 
           <View style={styles.titleContainer}>
             <Text style={styles.productTitle}>{product.title}</Text>
-            <Text style={styles.detailsValue}>{product.description}</Text>
+            <Text style={styles.productDescription}>{product.description}</Text>
           </View>
 
           <View style={styles.ratingContainer}>
@@ -42,7 +91,7 @@ export default function Details() {
               </Text>
             </View>
             <View style={styles.detailsItem}>
-              <Text style={styles.detailsLabel}>Porcentagem de desconto:</Text>
+              <Text style={styles.detailsLabel}>Desconto:</Text>
               <Text style={styles.detailsValue}>
                 {product.discountPercentage + '%'}
               </Text>
@@ -59,6 +108,14 @@ export default function Details() {
               <Text style={styles.detailsLabel}>Categoria:</Text>
               <Text style={styles.detailsValue}>{product.category}</Text>
             </View>
+          </View>
+          <View style={styles.buttonsContainer}>
+            <RoundedButton action={updateProduct} text='Editar' />
+            <RoundedButton
+              isDeleteButton
+              action={verifyDeleteAction}
+              text='Deletar'
+            />
           </View>
         </ScrollView>
       )}
@@ -98,8 +155,14 @@ const styles = StyleSheet.create({
   },
   productTitle: {
     color: '#fff',
-    fontSize: 20,
+    fontSize: 22,
     fontFamily: 'InterBold',
+  },
+  productDescription: {
+    color: '#fff',
+    fontSize: 15,
+    fontFamily: 'InterMedium',
+    textAlign: 'center',
   },
   detailsLabel: {
     marginRight: 5,
@@ -111,6 +174,11 @@ const styles = StyleSheet.create({
     flexShrink: 1,
     color: '#fff',
     fontFamily: 'InterMedium',
-    textAlign: 'center',
+  },
+  buttonsContainer: {
+    width: '100%',
+    paddingVertical: 15,
+    height: 165,
+    justifyContent: 'space-evenly',
   },
 });
