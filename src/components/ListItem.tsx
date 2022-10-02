@@ -27,7 +27,7 @@ export const ListItem = (props: Props) => {
       <View style={styles.leftContent}>
         <Text style={styles.title}>{title}</Text>
         <TouchableOpacity onPress={seeMore}>
-          <Text style={styles.seeMoreText}>Ver mais</Text>
+          <Text style={styles.seeMoreText}>Ver dados</Text>
         </TouchableOpacity>
       </View>
       <View style={styles.rightContent}>
