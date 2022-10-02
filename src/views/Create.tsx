@@ -5,21 +5,24 @@ import { Header } from '../components';
 import { FormInterface } from '../helpers/types';
 import { ModalContext } from '../providers/Modal';
 import { ProductForm } from '../components/ProductForm';
+import { isValidForm } from '../helpers/utils';
+
+const initialState = {
+  title: '',
+  description: '',
+  price: 0,
+  discountPercentage: 0,
+  rating: 0,
+  stock: 0,
+  brand: '',
+  category: '',
+};
 
 export default function Create() {
   const navigation = useNavigation();
 
   const { setShowModal } = useContext(ModalContext);
-  const [form, setForm] = useState<FormInterface>({
-    title: '',
-    description: '',
-    price: 0,
-    discountPercentage: 0,
-    rating: 0,
-    stock: 0,
-    brand: '',
-    category: '',
-  });
+  const [form, setForm] = useState<FormInterface>(initialState);
 
   const handleChange = (name: string, value: string) => {
     setForm((form) => ({
@@ -33,21 +36,29 @@ export default function Create() {
   };
 
   const handleSave = () => {
-    Object.values(form).forEach((item) => {
-      if (item === '') {
-        setShowModal({
-          msg: 'Preencha todos os campos para salvar!',
-        });
-        return;
-      }
-    });
+    const isValid = isValidForm(form, setShowModal);
+    if (!isValid) return;
 
-    setShowModal({
-      msg: 'Salvo!',
-      onOk: () => {
-        navigation.navigate('Welcome' as never);
-      },
-    });
+    fetch('https://dummyjson.com/products/add', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(form),
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        if (res?.id) {
+          setShowModal({
+            msg: 'Cadastrado com sucesso!\n\nComo a API é só para simulação, o produto não será realmente adicionado na lista principal.',
+            onOk: () => {
+              setForm(initialState);
+            },
+          });
+          return;
+        }
+        setShowModal({
+          msg: 'Oops... Algo deu errado ao cadastrar novo produto!',
+        });
+      });
   };
 
   return (

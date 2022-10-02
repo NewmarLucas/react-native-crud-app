@@ -2,7 +2,7 @@ import React, { useState, createContext, useContext } from 'react';
 
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 
-interface ShowModalInterface {
+export interface ShowModalInterface {
   msg?: string;
   onOk?: () => void;
   onCancel?: () => void;
