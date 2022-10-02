@@ -1,10 +1,9 @@
 import React, { useContext, useState } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { Header } from '../components';
+import { Header, ProductForm } from '../components';
 import { FormInterface } from '../helpers/types';
 import { ModalContext } from '../providers/Modal';
-import { ProductForm } from '../components/ProductForm';
 import { isValidForm } from '../helpers/utils';
 import { LoadingContext } from '../providers/Loading';
 

@@ -28,7 +28,7 @@ export default function Details() {
   const [showImageModal, setShowImageModal] = useState(false);
   const images = [
     { url: product.thumbnail },
-    ...product.images.map((item) => ({ url: item })),
+    ...product.images.map((item: string) => ({ url: item })),
   ];
 
   const updateProduct = () => {

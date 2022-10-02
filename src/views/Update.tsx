@@ -1,10 +1,9 @@
 import React, { useContext, useState } from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
-import { Header, RoundedButton } from '../components';
+import { Header, RoundedButton, ProductForm } from '../components';
 import { DataInterface, FormInterface } from '../helpers/types';
 import { ModalContext } from '../providers/Modal';
-import { ProductForm } from '../components/ProductForm';
 import { isValidForm } from '../helpers/utils';
 import { LoadingContext } from '../providers/Loading';
 

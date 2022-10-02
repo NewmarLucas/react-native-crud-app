@@ -1,7 +1,6 @@
 import React from 'react';
 import { Text, View, StyleSheet } from 'react-native';
 import { Feather } from '@expo/vector-icons';
-import Constants from 'expo-constants';
 
 interface Props {
   text?: string;
