@@ -5,6 +5,7 @@ import { Header } from '../components';
 import { DataInterface, FormInterface } from '../helpers/types';
 import { ModalContext } from '../providers/Modal';
 import { ProductForm } from '../components/ProductForm';
+import { isValidForm } from '../helpers/utils';
 
 export default function Update() {
   const navigation = useNavigation();
@@ -36,21 +37,29 @@ export default function Update() {
   };
 
   const handleSave = () => {
-    Object.values(form).forEach((item) => {
-      if (item === '') {
-        setShowModal({
-          msg: 'Preencha todos os campos para salvar!',
-        });
-        return;
-      }
-    });
+    const isValid = isValidForm(form, setShowModal);
+    if (!isValid) return;
 
-    setShowModal({
-      msg: 'Salvo!',
-      onOk: () => {
-        navigation.navigate('Welcome' as never);
-      },
-    });
+    fetch(`https://dummyjson.com/products/${product.id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(form),
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        if (res?.id) {
+          setShowModal({
+            msg: 'Atualizado com sucesso!\n\nComo a API é só para simulação, o produto não terá seus dados alterados no servidor.',
+            onOk: () => {
+              navigation.navigate('Welcome' as never);
+            },
+          });
+          return;
+        }
+        setShowModal({
+          msg: 'Oops... Algo deu errado ao atualizar os dados do produto!',
+        });
+      });
   };
 
   return (

@@ -30,7 +30,7 @@ export default function Welcome() {
       .then((res) => {
         if (res?.isDeleted) {
           setShowModal({
-            msg: `O produto ${res?.title} foi deletado com sucesso!\nComo a API é só para simulação, esse produto continuará sendo retornado na lista principal.`,
+            msg: `O produto ${res?.title} foi deletado com sucesso!\n\nComo a API é só para simulação, esse produto não será realmente deletado do servidor.`,
           });
         }
       });

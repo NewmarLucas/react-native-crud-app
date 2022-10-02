@@ -48,7 +48,7 @@ export default function Create() {
       .then((res) => {
         if (res?.id) {
           setShowModal({
-            msg: 'Cadastrado com sucesso!\n\nComo a API é só para simulação, o produto não será realmente adicionado na lista principal.',
+            msg: 'Cadastrado com sucesso!\n\nComo a API é só para simulação, o produto não será realmente adicionado ao servidor.',
             onOk: () => {
               setForm(initialState);
             },
