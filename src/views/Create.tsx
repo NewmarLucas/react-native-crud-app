@@ -1,27 +1,24 @@
 import React, { useContext, useState } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import { Header } from '../components';
-import { DataInterface, FormInterface } from '../helpers/types';
+import { FormInterface } from '../helpers/types';
 import { ModalContext } from '../providers/Modal';
 import { ProductForm } from '../components/ProductForm';
 
-export default function Update() {
+export default function Create() {
   const navigation = useNavigation();
-  const route: RouteProp<{ params: { product: DataInterface } }, 'params'> =
-    useRoute();
-  const { product } = route.params;
 
   const { setShowModal } = useContext(ModalContext);
   const [form, setForm] = useState<FormInterface>({
-    title: product.title,
-    description: product.description,
-    price: product.price,
-    discountPercentage: product.discountPercentage,
-    rating: product.rating,
-    stock: product.stock,
-    brand: product.brand,
-    category: product.category,
+    title: '',
+    description: '',
+    price: 0,
+    discountPercentage: 0,
+    rating: 0,
+    stock: 0,
+    brand: '',
+    category: '',
   });
 
   const handleChange = (name: string, value: string) => {
@@ -55,7 +52,7 @@ export default function Update() {
 
   return (
     <View style={styles.container}>
-      <Header text='Atualizar dados do produto' showBackButton />
+      <Header text='Adicionar produto' showBackButton />
 
       <ProductForm form={form} handleChange={handleChange} />
 
@@ -64,7 +61,7 @@ export default function Update() {
           style={{ ...styles.button, backgroundColor: '#19A0CB' }}
           onPress={handleSave}
         >
-          <Text style={styles.textButton}>Salvar</Text>
+          <Text style={styles.textButton}>Adicionar</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={{ ...styles.button, backgroundColor: '#E20C0C' }}
