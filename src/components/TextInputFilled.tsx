@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, TextInput } from 'react-native';
+import { StyleSheet, Text, TextInput, View } from 'react-native';
 
 interface Props {
   value: string | number;
@@ -19,13 +19,14 @@ interface Props {
     | 'twitter'
     | 'web-search'
     | 'visible-password';
+  error?: string;
 }
 
 export const TextInputFilled = (props: Props) => {
-  const { value, onChangeText, label, type } = props;
+  const { value, onChangeText, label, type, error } = props;
 
   return (
-    <>
+    <View style={styles.inputContainer}>
       <Text style={styles.label}>{label}:</Text>
       <TextInput
         value={`${value}`}
@@ -34,15 +35,20 @@ export const TextInputFilled = (props: Props) => {
         placeholderTextColor='#999'
         keyboardType={type ?? 'default'}
       />
-    </>
+      {error && <Text style={styles.errorText}>{error}</Text>}
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
+  inputContainer: {
+    position: 'relative',
+    marginBottom: 20,
+    width: '100%',
+  },
   input: {
     height: 50,
     width: '100%',
-    marginBottom: 20,
     padding: 10,
     borderRadius: 8,
     backgroundColor: '#666',
@@ -54,5 +60,9 @@ const styles = StyleSheet.create({
     marginBottom: 5,
     color: '#fff',
     fontFamily: 'InterMedium',
+  },
+  errorText: {
+    color: '#E15A5A',
+    fontFamily: 'InterBold',
   },
 });

@@ -1,21 +1,44 @@
-import React, { useContext, useState } from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import React, { useContext } from 'react';
+import { StyleSheet, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Header, ProductForm, RoundedButton } from '../components';
 import { FormInterface } from '../helpers/types';
 import { ModalContext } from '../providers/Modal';
-import { isValidForm } from '../helpers/utils';
 import { LoadingContext } from '../providers/Loading';
+import { useForm } from '../hooks/useForm';
 
-const initialState = {
-  title: '',
-  description: '',
-  price: 0,
-  discountPercentage: 0,
-  rating: 0,
-  stock: 0,
-  brand: '',
-  category: '',
+const initialForm: FormInterface = {
+  isValid: false,
+  values: {
+    title: '',
+    description: '',
+    price: '',
+    discountPercentage: '',
+    rating: '',
+    stock: '',
+    brand: '',
+    category: '',
+  },
+  touched: {
+    title: false,
+    description: false,
+    price: false,
+    discountPercentage: false,
+    rating: false,
+    stock: false,
+    brand: false,
+    category: false,
+  },
+  errors: {
+    title: [],
+    description: [],
+    price: [],
+    discountPercentage: [],
+    rating: [],
+    stock: [],
+    brand: [],
+    category: [],
+  },
 };
 
 export default function Create() {
@@ -23,28 +46,24 @@ export default function Create() {
 
   const { setShowModal } = useContext(ModalContext);
   const { setLoading } = useContext(LoadingContext);
-  const [form, setForm] = useState<FormInterface>(initialState);
 
-  const handleChange = (name: string, value: string) => {
-    setForm((form) => ({
-      ...form,
-      [name]: value,
-    }));
-  };
+  const { form, handleChange, setForm, handleTouch, getFieldError } = useForm({
+    initialForm,
+  });
 
   const handleCancel = () => {
     navigation.navigate('Welcome' as never);
   };
 
   const handleSave = () => {
-    const isValid = isValidForm(form, setShowModal);
-    if (!isValid) return;
+    handleTouch();
+    if (!form.isValid) return;
 
     setLoading(true);
     fetch('https://dummyjson.com/products/add', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(form),
+      body: JSON.stringify(form.values),
     })
       .then((res) => res.json())
       .then((res) => {
@@ -53,7 +72,7 @@ export default function Create() {
           setShowModal({
             msg: 'Cadastrado com sucesso!\n\nComo a API é só para simulação, o produto não será realmente adicionado ao servidor.',
             onOk: () => {
-              setForm(initialState);
+              setForm(initialForm);
             },
           });
           return;
@@ -74,7 +93,11 @@ export default function Create() {
     <View style={styles.container}>
       <Header text='Adicionar produto' showBackButton />
 
-      <ProductForm form={form} handleChange={handleChange} />
+      <ProductForm
+        form={form}
+        handleChange={handleChange}
+        getFieldError={getFieldError}
+      />
 
       <View style={styles.buttonsContainer}>
         <RoundedButton action={handleSave} text='Adicionar' />

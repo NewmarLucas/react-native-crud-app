@@ -1,11 +1,11 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { Header, RoundedButton, ProductForm } from '../components';
 import { DataInterface, FormInterface } from '../helpers/types';
 import { ModalContext } from '../providers/Modal';
-import { isValidForm } from '../helpers/utils';
 import { LoadingContext } from '../providers/Loading';
+import { useForm } from '../hooks/useForm';
 
 export default function Update() {
   const navigation = useNavigation();
@@ -13,39 +13,60 @@ export default function Update() {
     useRoute();
   const { product } = route.params;
 
+  const initialForm: FormInterface = {
+    isValid: false,
+    values: {
+      title: product.title,
+      description: product.description,
+      price: `${product.price}`,
+      discountPercentage: `${product.discountPercentage}`,
+      rating: `${product.rating}`,
+      stock: `${product.stock}`,
+      brand: product.brand,
+      category: product.category,
+    },
+    touched: {
+      title: false,
+      description: false,
+      price: false,
+      discountPercentage: false,
+      rating: false,
+      stock: false,
+      brand: false,
+      category: false,
+    },
+    errors: {
+      title: [],
+      description: [],
+      price: [],
+      discountPercentage: [],
+      rating: [],
+      stock: [],
+      brand: [],
+      category: [],
+    },
+  };
+
   const { setShowModal } = useContext(ModalContext);
   const { setLoading } = useContext(LoadingContext);
-  const [form, setForm] = useState<FormInterface>({
-    title: product.title,
-    description: product.description,
-    price: product.price,
-    discountPercentage: product.discountPercentage,
-    rating: product.rating,
-    stock: product.stock,
-    brand: product.brand,
-    category: product.category,
-  });
 
-  const handleChange = (name: string, value: string) => {
-    setForm((form) => ({
-      ...form,
-      [name]: value,
-    }));
-  };
+  const { handleTouch, form, handleChange, getFieldError } = useForm({
+    initialForm,
+  });
 
   const handleCancel = () => {
     navigation.navigate('Welcome' as never);
   };
 
   const handleSave = () => {
-    const isValid = isValidForm(form, setShowModal);
-    if (!isValid) return;
+    handleTouch();
+    if (!form.isValid) return;
 
     setLoading(true);
     fetch(`https://dummyjson.com/products/${product.id}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(form),
+      body: JSON.stringify(form.values),
     })
       .then((res) => res.json())
       .then((res) => {
@@ -75,7 +96,11 @@ export default function Update() {
     <View style={styles.container}>
       <Header text='Atualizar dados do produto' showBackButton />
 
-      <ProductForm form={form} handleChange={handleChange} />
+      <ProductForm
+        form={form}
+        handleChange={handleChange}
+        getFieldError={getFieldError}
+      />
 
       <View style={styles.buttonsContainer}>
         <RoundedButton action={handleSave} text='Salvar' />
