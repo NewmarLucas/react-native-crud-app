@@ -39,13 +39,13 @@ export default function Welcome() {
           return;
         }
         setShowModal({
-          msg: 'Oops... Algo deu errado ao atualizar os dados do produto!',
+          msg: 'Oops... Algo deu errado ao deletar o produto!',
         });
       })
       .catch(() => {
         setLoading(false);
         setShowModal({
-          msg: 'Oops... Algo deu errado ao atualizar os dados do produto!',
+          msg: 'Oops... Algo deu errado ao deletar o produto!',
         });
       });
   };

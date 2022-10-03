@@ -65,7 +65,7 @@ export default function Create() {
       .catch(() => {
         setLoading(false);
         setShowModal({
-          msg: 'Oops... Algo deu errado ao atualizar os dados do produto!',
+          msg: 'Oops... Algo deu errado ao cadastrar novo produto!',
         });
       });
   };
